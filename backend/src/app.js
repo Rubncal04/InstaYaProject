@@ -12,4 +12,7 @@ app.use(express.json());
 // User api routes
 app.use('/api/v1/users', require('./routes/user'));
 
+// Order api routes
+// app.use('/api/v1/orders', require('./routes/order'));
+
 module.exports = app;
