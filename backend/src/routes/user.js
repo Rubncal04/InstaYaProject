@@ -26,7 +26,7 @@ router.route('/:id/orders')
   .get(getOrders)
 
 router.route('/:id/orders/:order_id')
-  .post(updateOrder)
+  .put(updateOrder)
   .get(getOrder)
 
 module.exports = router;

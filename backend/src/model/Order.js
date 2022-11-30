@@ -5,6 +5,8 @@ const OrderSchema = new Schema({
   hour: {type: String},
   width: {type: Number},
   hight: {type: Number},
+  large: {type: Number},
+  weight: {type: Number},
   quantity: {type: Number},
   senderAddress: {type: String},
   senderCity: {type: String},

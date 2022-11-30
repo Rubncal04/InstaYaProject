@@ -15,13 +15,13 @@ orderController.getOrders = async (req, res) => {
 
 // Function create
 orderController.createOrder = async (req, res) => {
-  const { date, hour, width, hight, quantity,
+  const { date, hour, width, hight, large, weight, quantity,
     senderAddress, senderCity, senderPhone, senderCellPhone,
     targetAddress, targetCity, receiverPhone } = req.body;
 
   const newOrder = new Order({
-    date: date, hour: hour, width: width,
-    hight: hight, quantity: quantity,
+    date: date, hour: hour, width: width, weight: weight,
+    large: large, hight: hight, quantity: quantity,
     senderAddress: senderAddress, senderCity: senderCity,
     senderPhone: senderPhone, senderCellPhone: senderCellPhone,
     targetAddress: targetAddress,
@@ -50,12 +50,12 @@ orderController.getOrder = async(req, res)=>{
 
 // Function update order
 orderController.updateOrder = async(req, res)=>{
-  const { date, hour, width, hight, quantity,
+  const { date, hour, width, large, hight, weight, quantity,
     senderAddress, senderCity, senderPhone, senderCellPhone,
     targetAddress, targetCity, receiverPhone } = req.body;
 
   const order = await Order.findByIdAndUpdate(req.params.order_id, {
-    date, hour, width, hight, quantity,
+    date, hour, width, hight, weight, large, quantity,
     senderAddress, senderCity, senderPhone, senderCellPhone,
     targetAddress, targetCity, receiverPhone
   });
