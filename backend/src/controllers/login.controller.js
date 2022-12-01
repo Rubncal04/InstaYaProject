@@ -5,7 +5,7 @@ const signInController = async (req, res) => {
   const {userName, password} = req.body;
   User.findOne({userName}).then((user) => {
     if (!user) {
-      return req.json({error: "This username doesn't exist"});
+      return res.json({error: "This username doesn't exist"});
     }
 
     bcrypt.compare(password, user.password).then((isValid) => {
