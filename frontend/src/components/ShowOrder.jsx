@@ -17,8 +17,27 @@ const ShowOrder = () => {
   const [subId, setSubId] = useState(id);
   const [subOrderId, setSubOrderId] = useState(order_id);
   const [loading, setLoading] = useState(false);
+  const [loadingCancelOrder, setLoadingCancelOrder] = useState(false);
   const [message, setMessage] = useState();
   const navegate = useNavigate();
+
+  function CancelOrderButton(status) {
+    if (status.status !== 'Cancelled') {
+      return <form onSubmit={cancelOrder}>
+        <div className='d-grid gap-2 col-4 mx-auto mt-4'>
+          <button className='btn btn-danger mx-3' >{loadingCancelOrder ? 'loading...' : 'Cancel order'}</button>
+        </div>
+        </form>;
+    }
+  }
+
+  function UpdateOrderButton(status) {
+    if (status.status !== 'Cancelled') {
+      return <div className='d-grid gap-2 col-4 mx-auto mt-4'>
+        <button className='btn btn-primary' type='submit'>{loading ? 'loading...' : 'Update'}</button>
+      </div>;
+    }
+  }
 
   const getData = (e) => {
     const { name, value } = e.target;
@@ -107,6 +126,43 @@ const ShowOrder = () => {
     setSubOrderId('');
   }
 
+  const cancelOrder = async (e) => {
+    e.preventDefault();
+    const orderUpdated = {
+      status: 'Cancelled'
+    }
+
+    setLoadingCancelOrder(true);
+
+    await fetch(`http://localhost:4000/api/v1/users/${subId}/orders/${subOrderId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderUpdated),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setMessage(data.message)
+      setTimeout(() => {
+        setMessage('');
+        navegate(`/welcome/${subId}`)
+      }, 2500)
+      .catch((error) => {
+        console.error(error);
+        setMessage('Something went wrong');
+        setTimeout(() => {
+          setMessage('');
+        }, 1500)
+      })
+    });
+    setLoadingCancelOrder(false);
+
+    setOrder({...initial_value});
+    setSubId('');
+    setSubOrderId('');
+  }
+
   return(
     <div className='container'>
       <div className='col-md-12'>
@@ -135,7 +191,7 @@ const ShowOrder = () => {
                 </div>
                 {/* Limit to separate columns */}
                 <div className='mb-3 col-md-6'>
-                  <label>Status: { order.status }</label>
+                  <label><strong>Status:</strong> { order.status }</label>
                 </div>
                 {/* Second line */}
                 <div className='mb-3 col-md-2'>
@@ -222,11 +278,10 @@ const ShowOrder = () => {
                   value={order.receiverPhone} require onChange={getData}/>
                 </div>
               </div>
-              <div className='d-grid gap-2 col-4 mx-auto mt-4'>
-                <button className='btn btn-primary' type='submit'>{loading ? 'loading...' : 'Update'}</button>
-              </div>
+              <UpdateOrderButton status={order.status}></UpdateOrderButton>
             </form>
-          </div>
+            <CancelOrderButton status={order.status}></CancelOrderButton>
+            </div>
           {message && <div className={styles.toast}>{message}</div>}
         </div>
       </div>

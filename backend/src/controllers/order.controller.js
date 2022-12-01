@@ -52,12 +52,12 @@ orderController.getOrder = async(req, res)=>{
 orderController.updateOrder = async(req, res)=>{
   const { date, hour, width, large, hight, weight, quantity,
     senderAddress, senderCity, senderPhone, senderCellPhone,
-    targetAddress, targetCity, receiverPhone } = req.body;
+    targetAddress, targetCity, receiverPhone, status } = req.body;
 
   const order = await Order.findByIdAndUpdate(req.params.order_id, {
     date, hour, width, hight, weight, large, quantity,
     senderAddress, senderCity, senderPhone, senderCellPhone,
-    targetAddress, targetCity, receiverPhone
+    targetAddress, targetCity, receiverPhone, status
   });
 
   res.json({
